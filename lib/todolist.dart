@@ -8,10 +8,21 @@ class Todolist extends StatefulWidget {
 }
 
 class _TodolistState extends State<Todolist> {
+  int _selectedIndex = 0;
   List<String> tasks = []; // List to store tasks
   List<String> completedTasks = []; // List to store completed Tasks
+  List<Map<String, dynamic>> categoryItems = [
+    {'title': 'Daily Task', 'icon': Icons.home},
+    {'title': 'Homeworks', 'icon': Icons.class_},
+    {'title': 'Settings', 'icon': Icons.settings},
+  ];
+
+  String _selectedPage = "";
+
   TextEditingController taskController =
       TextEditingController(); // Get user input
+
+  TextEditingController categoryController = TextEditingController();
 
   // Add Task Function
   void addTask() {
@@ -45,10 +56,96 @@ class _TodolistState extends State<Todolist> {
     }
   }
 
+  // On tapped listview in drawer
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _selectedPage = categoryItems[_selectedIndex]['title'];
+    });
+  }
+
+  // Add category in drawer
+  void addCategory() {
+    if (categoryController.text.isNotEmpty) {
+      setState(() {
+        categoryItems.add({
+          'title': categoryController.text,
+          'icon': Icons.bookmark,
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('My Todo List 📋'), centerTitle: true),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            const DrawerHeader(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    backgroundImage: AssetImage("asset/abu.png"),
+                    radius: 48,
+                  ),
+                  SizedBox(width: 8),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Classy Cat",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "classycat@gmail.com",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            ListTile(title: Text("Category")),
+            ListView.builder(
+              padding: EdgeInsets.all(8),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: categoryItems.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  leading: Icon(categoryItems[index]['icon']),
+                  title: Text(categoryItems[index]['title']),
+                  selected: _selectedIndex == index,
+                  onTap: () {
+                    _onItemTapped(index);
+
+                    Navigator.pop(context);
+                  },
+                );
+              },
+            ),
+            Divider(thickness: 1),
+            ListTile(title: Text("Add category")),
+            ListTile(
+              leading: IconButton(
+                onPressed: addCategory,
+                icon: Icon(Icons.add),
+              ),
+              title: TextField(
+                controller: categoryController,
+                decoration: InputDecoration(hintText: "add new list category"),
+              ),
+            ),
+            Divider(thickness: 1),
+            ListTile(title: Text(_selectedPage)),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: ConstrainedBox(
@@ -186,3 +283,21 @@ class _TodolistState extends State<Todolist> {
     ),
   );
 }
+
+//  // DropdownMenuEntry labels and values for the second dropdown menu.
+// enum IconLabel {
+//   smile('Smile', Icons.sentiment_satisfied_outlined),
+//   cloud('Cloud', Icons.cloud_outlined),
+//   brush('Brush', Icons.brush_outlined),
+//   heart('Heart', Icons.favorite);
+
+//   const IconLabel(this.label, this.icon);
+//   final String label;
+//   final IconData icon;
+
+//   static final List<IconEntry> entries = UnmodifiableListView<IconEntry>(
+//     values.map<IconEntry>(
+//       (IconLabel icon) => IconEntry(value: icon, label: icon.label, leadingIcon: Icon(icon.icon)),
+//     ),
+//   );
+// }
