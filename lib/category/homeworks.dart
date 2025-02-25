@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/data/list_homework.dart';
+import 'package:my_first_app/model/list_model.dart';
 
 class HomeworkList extends StatefulWidget {
   const HomeworkList({super.key});
@@ -8,9 +10,6 @@ class HomeworkList extends StatefulWidget {
 }
 
 class _HomeworkListState extends State<HomeworkList> {
-  List<String> tasks = []; // List to store tasks
-  List<String> completedTasks = []; // List to store completed Tasks
-
   TextEditingController taskController =
       TextEditingController(); // Get user input
 
@@ -18,32 +17,32 @@ class _HomeworkListState extends State<HomeworkList> {
   void addTask() {
     if (taskController.text.isNotEmpty) {
       setState(() {
-        tasks.add(taskController.text); // add task to list
+        homeworkListData.add(
+          ListModel(listTitle: taskController.text, listStatus: "todo"),
+        ); // add task to list
         taskController.clear(); // clear input field
       });
     }
   }
 
   // Remove Task Function
-  void removeTask(int index, List list) {
+  void removeTask(int index) {
     setState(() {
-      list.removeAt(index); // remove task from the list based on index
+      homeworkListData.removeAt(
+        index,
+      ); // remove task from the list based on index
     });
   }
 
   // Move task to Done
-  void moveTask(int index, List list) {
-    if (list == completedTasks) {
-      setState(() {
-        tasks.add(completedTasks[index]);
-        removeTask(index, completedTasks);
-      });
-    } else if (list == tasks) {
-      setState(() {
-        completedTasks.add(tasks[index]);
-        removeTask(index, tasks);
-      });
-    }
+  void moveTask(int index) {
+    setState(() {
+      if (homeworkListData[index].listStatus == "done") {
+        homeworkListData[index].listStatus = "todo";
+      } else {
+        homeworkListData[index].listStatus = "done";
+      }
+    });
   }
 
   @override
@@ -100,31 +99,34 @@ class _HomeworkListState extends State<HomeworkList> {
                           padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: tasks.length,
+                          itemCount: homeworkListData.length,
                           itemBuilder: (context, index) {
-                            return Card(
-                              // margin: const EdgeInsets.only(bottom: 8),
-                              child: Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: CheckboxListTile(
-                                  value: false,
-                                  onChanged: (bool? value) {
-                                    moveTask(index, tasks);
-                                  },
-                                  title: Text(
-                                    tasks[index],
-                                    textAlign: TextAlign.end,
-                                  ),
-                                  secondary: IconButton(
-                                    onPressed: () => removeTask(index, tasks),
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: Colors.redAccent[700],
+                            if (homeworkListData[index].listStatus == "todo") {
+                              return Card(
+                                // margin: const EdgeInsets.only(bottom: 8),
+                                child: Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: CheckboxListTile(
+                                    value: false,
+                                    onChanged: (bool? value) {
+                                      moveTask(index);
+                                    },
+                                    title: Text(
+                                      homeworkListData[index].listTitle,
+                                      textAlign: TextAlign.end,
+                                    ),
+                                    secondary: IconButton(
+                                      onPressed: () => removeTask(index),
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Colors.redAccent[700],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
+                              );
+                            }
+                            return const SizedBox.shrink();
                           },
                         ),
                       ],
@@ -132,13 +134,14 @@ class _HomeworkListState extends State<HomeworkList> {
                   ),
                 ),
 
-                if (completedTasks.isNotEmpty) ...[
-                  sectionTitle('Done'),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: completedTasks.length,
-                    itemBuilder: (context, index) {
+                // if (homeworkListData.contains(ListModel(listTitle: "", listStatus: "todo")))
+                sectionTitle('Done'),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: homeworkListData.length,
+                  itemBuilder: (context, index) {
+                    if (homeworkListData[index].listStatus == "done") {
                       return Card(
                         // margin: const EdgeInsets.only(bottom: 8),
                         child: Directionality(
@@ -146,27 +149,27 @@ class _HomeworkListState extends State<HomeworkList> {
                           child: CheckboxListTile(
                             value: true,
                             onChanged: (bool? value) {
-                              moveTask(index, completedTasks);
+                              moveTask(index);
                             },
                             activeColor: Colors.grey,
                             title: Text(
-                              completedTasks[index],
+                              homeworkListData[index].listTitle,
                               textAlign: TextAlign.end,
                               style: TextStyle(
                                 decoration: TextDecoration.lineThrough,
                               ),
                             ),
                             secondary: IconButton(
-                              onPressed:
-                                  () => removeTask(index, completedTasks),
+                              onPressed: () => removeTask(index),
                               icon: Icon(Icons.delete, color: Colors.grey),
                             ),
                           ),
                         ),
                       );
-                    },
-                  ),
-                ],
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
               ],
             ),
           ),
@@ -183,21 +186,3 @@ class _HomeworkListState extends State<HomeworkList> {
     ),
   );
 }
-
-//  // DropdownMenuEntry labels and values for the second dropdown menu.
-// enum IconLabel {
-//   smile('Smile', Icons.sentiment_satisfied_outlined),
-//   cloud('Cloud', Icons.cloud_outlined),
-//   brush('Brush', Icons.brush_outlined),
-//   heart('Heart', Icons.favorite);
-
-//   const IconLabel(this.label, this.icon);
-//   final String label;
-//   final IconData icon;
-
-//   static final List<IconEntry> entries = UnmodifiableListView<IconEntry>(
-//     values.map<IconEntry>(
-//       (IconLabel icon) => IconEntry(value: icon, label: icon.label, leadingIcon: Icon(icon.icon)),
-//     ),
-//   );
-// }
