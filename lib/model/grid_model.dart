@@ -1,26 +1,20 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-
 class GridModel {
-  final String name;
-  final Color color;
-  GridModel({required this.name, required this.color});
+  final String imagePath;
+  GridModel({required this.imagePath});
 
-  GridModel copyWith({String? name, Color? color}) {
-    return GridModel(name: name ?? this.name, color: color ?? this.color);
+  GridModel copyWith({String? imagePath}) {
+    return GridModel(imagePath: imagePath ?? this.imagePath);
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{'name': name, 'color': color.value};
+    return <String, dynamic>{'imagePath': imagePath};
   }
 
   factory GridModel.fromMap(Map<String, dynamic> map) {
-    return GridModel(
-      name: map['name'] as String,
-      color: Color(map['color'] as int),
-    );
+    return GridModel(imagePath: map['imagePath'] as String);
   }
 
   String toJson() => json.encode(toMap());
@@ -29,15 +23,15 @@ class GridModel {
       GridModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'GridModel(name: $name, color: $color)';
+  String toString() => 'GridModel(imagePath: $imagePath)';
 
   @override
   bool operator ==(covariant GridModel other) {
     if (identical(this, other)) return true;
 
-    return other.name == name && other.color == color;
+    return other.imagePath == imagePath;
   }
 
   @override
-  int get hashCode => name.hashCode ^ color.hashCode;
+  int get hashCode => imagePath.hashCode;
 }

@@ -9,21 +9,40 @@ class Other extends StatefulWidget {
 }
 
 class _OtherState extends State<Other> {
+  Color borderColor = Colors.black87;
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       padding: EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
+        crossAxisCount: 2,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
       ),
       itemCount: gridData.length,
       itemBuilder: (context, index) {
-        final data = gridData[index];
-        return Container(
-          color: data.color,
-          child: Text(data.name, style: TextStyle(fontSize: 16)),
+        // final data = gridData[index];
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              borderColor == Colors.black87
+                  ? borderColor = Colors.deepPurple
+                  : borderColor = Colors.black87;
+            });
+          },
+          child: Container(
+            key: Key(index.toString()),
+            // color: Colors.black,
+            padding: EdgeInsets.all(1.25),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+              color: borderColor,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(gridData[index].imagePath),
+            ),
+          ),
         );
       },
     );
