@@ -9,7 +9,7 @@ class Other extends StatefulWidget {
 }
 
 class _OtherState extends State<Other> {
-  Color borderColor = Colors.black87;
+  int? selectedIndex;
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -21,19 +21,18 @@ class _OtherState extends State<Other> {
       ),
       itemCount: gridData.length,
       itemBuilder: (context, index) {
-        // final data = gridData[index];
+        final isSelected = selectedIndex == index;
+        final borderColor = isSelected ? Colors.deepPurple : Colors.black87;
+
         return GestureDetector(
           onTap: () {
             setState(() {
-              borderColor == Colors.black87
-                  ? borderColor = Colors.deepPurple
-                  : borderColor = Colors.black87;
+              selectedIndex = index;
             });
           },
           child: Container(
-            key: Key(index.toString()),
             // color: Colors.black,
-            padding: EdgeInsets.all(1.25),
+            padding: EdgeInsets.all(1.5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(16)),
               color: borderColor,

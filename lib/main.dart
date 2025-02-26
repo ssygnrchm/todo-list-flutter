@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_first_app/category/daily_task.dart';
 import 'package:my_first_app/category/homeworks.dart';
 import 'package:my_first_app/category/other.dart';
+import 'package:my_first_app/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHome(),
+      home: const LoginPage(),
     );
   }
 }
@@ -44,14 +45,12 @@ class _MyHomeState extends State<MyHome> {
     HomeworkList(),
     Other(),
   ];
-  String _selectedPage = "";
 
   TextEditingController categoryController = TextEditingController();
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      _selectedPage = categoryItems[_selectedIndex]['title'];
     });
   }
 
@@ -75,6 +74,7 @@ class _MyHomeState extends State<MyHome> {
         title: Text(categoryItems[_selectedIndex]['title']),
         centerTitle: true,
       ),
+
       drawer: Drawer(
         child: Column(
           children: [
@@ -137,22 +137,22 @@ class _MyHomeState extends State<MyHome> {
               ),
             ),
             Divider(thickness: 1),
-            ListTile(title: Text(_selectedPage)),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Daily Tasks'),
-          BottomNavigationBarItem(icon: Icon(Icons.class_), label: 'Homeworks'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.attribution),
-            label: 'Other',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
+
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Daily Tasks'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.class_), label: 'Homeworks'),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.attribution),
+      //       label: 'Other',
+      //     ),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   onTap: _onItemTapped,
+      // ),
       body: Container(child: _widgetOptions.elementAt(_selectedIndex)),
     );
   }

@@ -3,15 +3,8 @@ import 'package:my_first_app/model/list_model.dart';
 
 class TodoListView extends StatefulWidget {
   final List<ListModel> listData;
-  final String title;
-  final Color backgroundColor;
 
-  const TodoListView({
-    super.key,
-    required this.listData,
-    this.title = 'Todo List',
-    this.backgroundColor = const Color.fromARGB(255, 210, 198, 240),
-  });
+  const TodoListView({super.key, required this.listData});
 
   @override
   State<TodoListView> createState() => _TodoListViewState();
@@ -26,8 +19,8 @@ class _TodoListViewState extends State<TodoListView> {
       setState(() {
         widget.listData.add(
           ListModel(listTitle: taskController.text, listStatus: "todo"),
-        );
-        taskController.clear();
+        ); // add task to list
+        taskController.clear(); // clear input field
       });
     }
   }
@@ -35,7 +28,9 @@ class _TodoListViewState extends State<TodoListView> {
   // Remove Task Function
   void removeTask(int index) {
     setState(() {
-      widget.listData.removeAt(index);
+      widget.listData.removeAt(
+        index,
+      ); // remove task from the list based on index
     });
   }
 
@@ -65,7 +60,8 @@ class _TodoListViewState extends State<TodoListView> {
                     Expanded(
                       child: TextField(
                         controller: taskController,
-                        onEditingComplete: addTask,
+                        onEditingComplete:
+                            addTask, // adding task to list after hit enter
                         decoration: InputDecoration(
                           hintText: 'Enter a task',
                           border: OutlineInputBorder(
@@ -92,10 +88,12 @@ class _TodoListViewState extends State<TodoListView> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: widget.backgroundColor,
+                    color: const Color.fromARGB(255, 210, 198, 240),
                   ),
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: 300),
+                    constraints: BoxConstraints(
+                      minHeight: MediaQuery.sizeOf(context).height / 3,
+                    ),
                     child: Column(
                       children: [
                         sectionTitle('Todo'),
