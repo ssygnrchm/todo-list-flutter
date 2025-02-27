@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -10,9 +8,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool isPassword = false;
   @override
   Widget build(BuildContext context) {
@@ -28,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 18,
             children: [
               Column(
@@ -39,43 +36,60 @@ class _LoginPageState extends State<LoginPage> {
                       value: "Welcome Back",
                       fsize: 24,
                       fweight: FontWeight.bold,
+                      textColor: const Color.fromARGB(255, 34, 34, 34),
                     ),
                   ),
                   Center(
-                    child: textWidget(value: "Login to access your account"),
+                    child: textWidget(
+                      value: "Login to access your account",
+                      fsize: 14,
+                    ),
                   ),
                 ],
               ),
-              textWidget(value: "Email Address"),
-              loginTextField("Enter your email", controller: _emailController),
-              textWidget(value: "Phone Number"),
-              loginTextField(
-                "Enter your phone number",
-                controller: _phoneController,
-              ),
-              textWidget(value: "Password"),
-              loginTextField(
-                "Enter your password",
-                controller: _passwordController,
-                isPassword: true,
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: textWidget(value: "Forgot Password?"),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 18,
+                children: [
+                  textWidget(value: "Email Address"),
+                  loginTextField(
+                    "Enter your email",
+                    controller: _emailController,
+                  ),
+                  textWidget(value: "Phone Number"),
+                  loginTextField(
+                    "Enter your phone number",
+                    controller: _phoneController,
+                  ),
+                  textWidget(value: "Password"),
+                  loginTextField(
+                    "Enter your password",
+                    controller: _passwordController,
+                    isPassword: true,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: textWidget(
+                      value: "Forgot Password?",
+                      textColor: const Color.fromARGB(255, 243, 75, 27),
+                    ),
+                  ),
+                ],
               ),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {},
-                      child: Text("Login"),
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        backgroundColor: Colors.indigo,
+                        backgroundColor: const Color.fromARGB(255, 40, 63, 177),
                         foregroundColor: Colors.white,
                       ),
+                      child: Text("Login"),
                     ),
                   ),
                 ],
@@ -92,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Expanded(
                     child: ElevatedButton.icon(
-                      icon: Icon(Icons.home),
+                      icon: Image.asset("asset/iconGoogle.png"),
                       onPressed: () {},
                       label: Text("Google"),
                     ),
@@ -101,9 +115,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 4,
                 children: [
                   textWidget(value: "Don't have an account?"),
-                  textWidget(value: "Sign Up"),
+                  textWidget(
+                    value: "Sign Up",
+                    textColor: const Color.fromARGB(255, 40, 63, 177),
+                    fweight: FontWeight.bold,
+                  ),
                 ],
               ),
             ],
@@ -117,8 +136,12 @@ class _LoginPageState extends State<LoginPage> {
     required String value,
     double fsize = 12,
     FontWeight fweight = FontWeight.normal,
+    Color textColor = const Color.fromARGB(255, 136, 136, 136),
   }) {
-    return Text(value, style: TextStyle(fontSize: fsize, fontWeight: fweight));
+    return Text(
+      value,
+      style: TextStyle(fontSize: fsize, fontWeight: fweight, color: textColor),
+    );
   }
 
   TextField loginTextField(
@@ -135,9 +158,11 @@ class _LoginPageState extends State<LoginPage> {
       obscureText: isPassword,
       style: TextStyle(),
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(16),
+        isDense: true,
         hintText: hinttext,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32)),
-        suffixIcon: isPassword ? Icon(Icons.visibility) : null,
+        suffixIcon: isPassword ? Icon(Icons.visibility_off_outlined) : null,
       ),
     );
   }
