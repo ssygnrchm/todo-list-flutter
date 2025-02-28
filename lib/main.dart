@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_first_app/category/daily_task.dart';
-import 'package:my_first_app/category/homeworks.dart';
-import 'package:my_first_app/category/other.dart';
-import 'package:my_first_app/login.dart';
+import 'package:my_first_app/views/category/daily_task.dart';
+import 'package:my_first_app/views/category/homeworks.dart';
+import 'package:my_first_app/views/category/other.dart';
+import 'package:my_first_app/auth/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +34,7 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
-  int _selectedIndex = 0; // List to store completed Tasks
+  int _selectedIndex = 0;
   List<Map<String, dynamic>> categoryItems = [
     {'title': 'Daily Task', 'icon': Icons.home},
     {'title': 'Homeworks', 'icon': Icons.class_},

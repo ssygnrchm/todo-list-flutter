@@ -11,19 +11,30 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  // To check if textfield is for password
   bool isPassword = false;
+
+  // Icon for password visibility
+  Icon visibilityIcon = Icon(Icons.visibility_off_outlined);
+
+  // Password visibility
+  bool isObsecure = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        alignment: Alignment.center,
+        height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("asset/background_login.png"),
             fit: BoxFit.cover,
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 18,
@@ -81,8 +92,13 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {});
+                      },
                       style: ElevatedButton.styleFrom(
+                        minimumSize: Size.fromHeight(
+                          MediaQuery.sizeOf(context).height / 15,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -107,6 +123,11 @@ class _LoginPageState extends State<LoginPage> {
                   Expanded(
                     child: ElevatedButton.icon(
                       icon: Image.asset("asset/iconGoogle.png"),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size.fromHeight(
+                          MediaQuery.sizeOf(context).height / 15,
+                        ),
+                      ),
                       onPressed: () {},
                       label: Text("Google"),
                     ),
@@ -154,15 +175,31 @@ class _LoginPageState extends State<LoginPage> {
       onChanged: (value) {
         setState(() {});
       },
-      obscuringCharacter: "*",
-      obscureText: isPassword,
+      obscuringCharacter: "•",
+      obscureText: isPassword ? isObsecure : false,
       style: TextStyle(),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(16),
         isDense: true,
         hintText: hinttext,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32)),
-        suffixIcon: isPassword ? Icon(Icons.visibility_off_outlined) : null,
+        suffixIcon:
+            isPassword
+                ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isObsecure = !isObsecure;
+                    });
+                  },
+                  icon: Icon(
+                    isObsecure
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    color: Colors.grey,
+                    size: 24,
+                  ),
+                )
+                : null,
       ),
     );
   }
