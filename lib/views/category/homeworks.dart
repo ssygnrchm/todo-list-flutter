@@ -7,6 +7,6 @@ class HomeworkList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TodoListView(listData: homeworkListData);
+    return TodoListView(title: 'homeworks', listData: homeworkListData);
   }
 }

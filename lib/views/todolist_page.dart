@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:my_first_app/model/list_model.dart';
 
 class TodoListView extends StatefulWidget {
+  final String title;
   final List<ListModel> listData;
 
-  const TodoListView({super.key, required this.listData});
+  const TodoListView({super.key, required this.title, required this.listData});
 
   @override
   State<TodoListView> createState() => _TodoListViewState();

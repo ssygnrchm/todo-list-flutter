@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/auth/login.dart';
+// import 'package:my_first_app/model/list_model.dart';
 import 'package:my_first_app/views/category/daily_task.dart';
 import 'package:my_first_app/views/category/homeworks.dart';
 import 'package:my_first_app/views/category/other.dart';
-import 'package:my_first_app/auth/login.dart';
+// import 'package:my_first_app/views/todolist_page.dart';
+// import 'package:my_first_app/auth/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,6 +44,15 @@ class _MyHomeState extends State<MyHome> {
     {'title': 'Other', 'icon': Icons.settings},
   ];
 
+  List<Widget> dynamicPages = [];
+
+  List<Widget> get allPages => [
+    Todolist(),
+    HomeworkList(),
+    Other(),
+    ...dynamicPages,
+  ];
+
   static const List<Widget> _widgetOptions = <Widget>[
     Todolist(),
     HomeworkList(),
@@ -58,7 +70,13 @@ class _MyHomeState extends State<MyHome> {
   // Add category in drawer
   void addCategory() {
     if (categoryController.text.isNotEmpty) {
+      // final newCategoryTitle = categoryController.text;
+
       setState(() {
+        // final newListData = <ListModel>[];
+
+        // final newPage = TodoListView(listData: newListData);
+
         categoryItems.add({
           'title': categoryController.text,
           'icon': Icons.bookmark,

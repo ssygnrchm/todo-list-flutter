@@ -7,6 +7,6 @@ class Todolist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TodoListView(listData: dailyListData);
+    return TodoListView(title: 'daily_task', listData: dailyListData);
   }
 }

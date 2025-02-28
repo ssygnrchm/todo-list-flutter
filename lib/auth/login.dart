@@ -13,29 +13,29 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // To check if textfield is for password
-  bool isPassword = false;
-
-  // Icon for password visibility
-  Icon visibilityIcon = Icon(Icons.visibility_off_outlined);
-
+  // Form Key
+  final _formKey = GlobalKey<FormState>();
+  // Activate Button
+  bool _isActive = true;
   // Password visibility
-  bool isObsecure = false;
+  bool _isObsecure = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         alignment: Alignment.center,
         height: MediaQuery.of(context).size.height,
+        padding: EdgeInsets.all(24),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("asset/background_login.png"),
             fit: BoxFit.cover,
           ),
         ),
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(24),
+        child: Form(
+          key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 18,
@@ -68,17 +68,35 @@ class _LoginPageState extends State<LoginPage> {
                   loginTextField(
                     "Enter your email",
                     controller: _emailController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Email belum diisi";
+                      }
+                      return null;
+                    },
                   ),
                   textWidget(value: "Phone Number"),
                   loginTextField(
                     "Enter your phone number",
                     controller: _phoneController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Nomor telepon belum diisi";
+                      }
+                      return null;
+                    },
                   ),
                   textWidget(value: "Password"),
                   loginTextField(
                     "Enter your password",
                     controller: _passwordController,
                     isPassword: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Password belum diisi";
+                      }
+                      return null;
+                    },
                   ),
                   Align(
                     alignment: Alignment.centerRight,
@@ -93,11 +111,19 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          // MyHome();
-                        });
-                      },
+                      onPressed:
+                          _isActive
+                              ? () {
+                                if (!_formKey.currentState!.validate()) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const MyHome(),
+                                    ),
+                                  );
+                                }
+                              }
+                              : null,
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size.fromHeight(
                           MediaQuery.sizeOf(context).height / 15,
@@ -105,7 +131,15 @@ class _LoginPageState extends State<LoginPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        backgroundColor: const Color.fromARGB(255, 40, 63, 177),
+                        backgroundColor:
+                            _isActive
+                                ? const Color.fromARGB(255, 40, 63, 177)
+                                : Color.fromARGB(
+                                  255,
+                                  40,
+                                  63,
+                                  177,
+                                ).withOpacity(0.2),
                         foregroundColor: Colors.white,
                       ),
                       child: Text("Login"),
@@ -168,19 +202,19 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  TextField loginTextField(
-    String hinttext, {
+  Widget loginTextField(
+    String? hinttext, {
     required TextEditingController controller,
     bool isPassword = false,
+    String? Function(String?)? validator,
   }) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       onChanged: (value) {
         setState(() {});
       },
       obscuringCharacter: "•",
-      obscureText: isPassword ? isObsecure : false,
-      style: TextStyle(),
+      obscureText: isPassword ? _isObsecure : false,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(16),
         isDense: true,
@@ -191,11 +225,11 @@ class _LoginPageState extends State<LoginPage> {
                 ? IconButton(
                   onPressed: () {
                     setState(() {
-                      isObsecure = !isObsecure;
+                      _isObsecure = !_isObsecure;
                     });
                   },
                   icon: Icon(
-                    isObsecure
+                    _isObsecure
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
                     color: Colors.grey,
@@ -204,6 +238,10 @@ class _LoginPageState extends State<LoginPage> {
                 )
                 : null,
       ),
+      validator: validator,
     );
   }
 }
+
+// Using textFormField for validating value
+// flutter gems
