@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed:
                           _isActive
                               ? () {
-                                if (!_formKey.currentState!.validate()) {
+                                if (_formKey.currentState!.validate()) {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
