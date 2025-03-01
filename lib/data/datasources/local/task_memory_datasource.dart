@@ -77,4 +77,14 @@ class TaskMemoryDataSource {
       _categoryTask[category]!.removeWhere((task) => task.id == id);
     }
   }
+
+  List<String> getAllCategories() {
+    return _categoryTask.keys.toList();
+  }
+
+  void addCategory(String category) {
+    if (!_categoryTask.containsKey(category)) {
+      _categoryTask[category] = [];
+    }
+  }
 }

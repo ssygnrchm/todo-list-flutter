@@ -32,4 +32,16 @@ class TaskRepositoryImpl implements TaskRepository {
     // TODO: implement deleteTask
     dataSource.deleteTask(id);
   }
+
+  @override
+  List<String> getAllCategories() {
+    // TODO: implement getAllCategories
+    return dataSource.getAllCategories();
+  }
+
+  @override
+  void addCategory(String category) {
+    // TODO: implement addCategory
+    dataSource.addCategory(category);
+  }
 }

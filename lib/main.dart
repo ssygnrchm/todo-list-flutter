@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
               ),
           update:
               (context, repository, previous) =>
-                  previous ?? TaskProvider(repository),
+                  previous!..setRepository(repository),
         ),
       ],
       child: MaterialApp(
@@ -70,11 +70,40 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> {
   int _selectedIndex = 0;
-  final List<Map<String, dynamic>> _categoryItems = [
-    {'title': 'Daily Task', 'category': 'daily_task', 'icon': Icons.home},
-    {'title': 'Homeworks', 'category': 'homeworks', 'icon': Icons.class_},
-    {'title': 'Other', 'category': 'other', 'icon': Icons.settings},
-  ];
+  TextEditingController categoryController = TextEditingController();
+
+  List<Map<String, dynamic>> get _categoryItems {
+    final provider = Provider.of<TaskProvider>(context, listen: false);
+    final defaultCategories = [
+      {'title': 'Daily Task', 'category': 'daily_task', 'icon': Icons.home},
+      {'title': 'Homeworks', 'category': 'homeworks', 'icon': Icons.class_},
+      {'title': 'Other', 'category': 'other', 'icon': Icons.settings},
+    ];
+
+    final dynamicCategories =
+        provider.categories
+            .where(
+              (category) =>
+                  !['daily_task', 'homeworks', 'other'].contains(category),
+            )
+            .map(
+              (category) => {
+                'title': category,
+                'category': category,
+                'icon': Icons.list,
+              },
+            )
+            .toList();
+    return [...defaultCategories, ...dynamicCategories];
+  }
+
+  void addCategory() {
+    if (categoryController.text.isNotEmpty) {
+      final provider = Provider.of<TaskProvider>(context, listen: false);
+      provider.addCategory(categoryController.text);
+      categoryController.clear();
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -136,19 +165,19 @@ class _MyHomeState extends State<MyHome> {
                 );
               },
             ),
-            // Divider(thickness: 1),
-            // ListTile(title: Text("Add category")),
-            // ListTile(
-            //   leading: IconButton(
-            //     onPressed: addCategory,
-            //     icon: Icon(Icons.add),
-            //   ),
-            //   title: TextField(
-            //     controller: categoryController,
-            //     decoration: InputDecoration(hintText: "add new list category"),
-            //   ),
-            // ),
-            // Divider(thickness: 1),
+            Divider(thickness: 1),
+            ListTile(title: Text("Add category")),
+            ListTile(
+              leading: IconButton(
+                onPressed: addCategory,
+                icon: Icon(Icons.add),
+              ),
+              title: TextField(
+                controller: categoryController,
+                decoration: InputDecoration(hintText: "add new list category"),
+              ),
+            ),
+            Divider(thickness: 1),
           ],
         ),
       ),

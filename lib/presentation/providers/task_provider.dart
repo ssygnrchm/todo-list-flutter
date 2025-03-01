@@ -4,14 +4,16 @@ import 'package:my_first_app/domain/repositories/task_repository.dart';
 import 'package:uuid/uuid.dart';
 
 class TaskProvider extends ChangeNotifier {
-  final TaskRepository repository;
+  TaskRepository repository;
   final Uuid _uuid = const Uuid();
 
   String _currentCategory = 'daily_task';
   List<Task> _tasks = [];
+  List<String> _categories = [];
 
   TaskProvider(this.repository) {
     loadTasks(_currentCategory);
+    loadCategories();
   }
 
   String get currentCategory => _currentCategory;
@@ -23,13 +25,26 @@ class TaskProvider extends ChangeNotifier {
   List<Task> get doneTasks =>
       _tasks.where((task) => task.status == 'done').toList();
 
+  List<String> get categories => _categories;
+
   void setCategory(String category) {
     _currentCategory = category;
     loadTasks(category);
   }
 
+  void setRepository(TaskRepository newRepository) {
+    repository = newRepository;
+    loadTasks(_currentCategory);
+    loadCategories();
+  }
+
   void loadTasks(String category) {
     _tasks = repository.getTask(category);
+    notifyListeners();
+  }
+
+  void loadCategories() {
+    _categories = repository.getAllCategories();
     notifyListeners();
   }
 
@@ -43,6 +58,13 @@ class TaskProvider extends ChangeNotifier {
 
     repository.addTask(task);
     loadTasks(_currentCategory);
+  }
+
+  void addCategory(String category) {
+    if (category.trim().isNotEmpty) {
+      repository.addCategory(category.trim());
+      loadCategories();
+    }
   }
 
   void toogleTaskStatus(String id) {
