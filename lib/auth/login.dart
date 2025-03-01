@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   // Form Key
   final _formKey = GlobalKey<FormState>();
   // Activate Button
-  bool _isActive = true;
+  bool _isActive = false;
   // Password visibility
   bool _isObsecure = true;
 
@@ -115,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                           _isActive
                               ? () {
                                 if (_formKey.currentState!.validate()) {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => const MyHome(),
@@ -134,12 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                         backgroundColor:
                             _isActive
                                 ? const Color.fromARGB(255, 40, 63, 177)
-                                : Color.fromARGB(
-                                  255,
-                                  40,
-                                  63,
-                                  177,
-                                ).withOpacity(0.2),
+                                : Color.fromARGB(255, 153, 157, 177),
                         foregroundColor: Colors.white,
                       ),
                       child: Text("Login"),
@@ -211,7 +206,9 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       controller: controller,
       onChanged: (value) {
-        setState(() {});
+        setState(() {
+          _isActive = true;
+        });
       },
       obscuringCharacter: "•",
       obscureText: isPassword ? _isObsecure : false,

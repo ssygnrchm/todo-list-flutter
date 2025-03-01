@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/auth/login.dart';
-// import 'package:my_first_app/model/list_model.dart';
+import 'package:my_first_app/service/category_service.dart';
 import 'package:my_first_app/views/category/daily_task.dart';
 import 'package:my_first_app/views/category/homeworks.dart';
 import 'package:my_first_app/views/category/other.dart';
-// import 'package:my_first_app/views/todolist_page.dart';
-// import 'package:my_first_app/auth/login.dart';
+import 'package:my_first_app/views/todolist_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,11 +52,11 @@ class _MyHomeState extends State<MyHome> {
     ...dynamicPages,
   ];
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Todolist(),
-    HomeworkList(),
-    Other(),
-  ];
+  // static const List<Widget> _widgetOptions = <Widget>[
+  //   Todolist(),
+  //   HomeworkList(),
+  //   Other(),
+  // ];
 
   TextEditingController categoryController = TextEditingController();
 
@@ -70,17 +69,27 @@ class _MyHomeState extends State<MyHome> {
   // Add category in drawer
   void addCategory() {
     if (categoryController.text.isNotEmpty) {
-      // final newCategoryTitle = categoryController.text;
+      final newCategoryTitle = categoryController.text;
+
+      final newListData = CategoryService.getOrCreateListData(newCategoryTitle);
 
       setState(() {
         // final newListData = <ListModel>[];
 
-        // final newPage = TodoListView(listData: newListData);
+        final newPage = TodoListView(
+          title: newCategoryTitle,
+          listData: newListData,
+        );
+
+        dynamicPages.add(newPage);
 
         categoryItems.add({
           'title': categoryController.text,
           'icon': Icons.bookmark,
         });
+
+        _selectedIndex = allPages.length - 1;
+
         categoryController.clear(); // clear input field
       });
     }
@@ -172,7 +181,7 @@ class _MyHomeState extends State<MyHome> {
       //   currentIndex: _selectedIndex,
       //   onTap: _onItemTapped,
       // ),
-      body: Container(child: _widgetOptions.elementAt(_selectedIndex)),
+      body: Container(child: allPages.elementAt(_selectedIndex)),
     );
   }
 }
