@@ -109,6 +109,13 @@ class _MyHomeState extends State<MyHome> {
     setState(() {
       _selectedIndex = index;
     });
+
+    final provider = Provider.of<TaskProvider>(context, listen: false);
+    final category = _categoryItems[index]['category'];
+
+    Future.microtask(() {
+      provider.setCategory(category);
+    });
   }
 
   @override

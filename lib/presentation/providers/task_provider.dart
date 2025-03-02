@@ -17,6 +17,7 @@ class TaskProvider extends ChangeNotifier {
   }
 
   String get currentCategory => _currentCategory;
+
   List<Task> get tasks => _tasks;
 
   List<Task> get todoTasks =>

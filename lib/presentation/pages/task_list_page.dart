@@ -4,20 +4,34 @@ import 'package:my_first_app/presentation/widgets/task_input.dart';
 import 'package:my_first_app/presentation/widgets/task_list_item.dart';
 import 'package:provider/provider.dart';
 
-class TaskListPage extends StatelessWidget {
+class TaskListPage extends StatefulWidget {
   final String title;
   final String category;
 
   const TaskListPage({super.key, required this.title, required this.category});
 
   @override
+  State<TaskListPage> createState() => _TaskListPageState();
+}
+
+class _TaskListPageState extends State<TaskListPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<TaskProvider>(
+        context,
+        listen: false,
+      ).setCategory(widget.category);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<TaskProvider>(
       builder: (context, provider, _) {
-        if (provider.currentCategory != category) {
-          provider.setCategory(category);
-        }
-
         return SingleChildScrollView(
           child: Center(
             child: ConstrainedBox(
