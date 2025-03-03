@@ -137,19 +137,23 @@ class _MyHomeState extends State<MyHome> {
               ),
             ),
             const ListTile(title: Text("Category")),
-            ListView.builder(
-              padding: EdgeInsets.all(8),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _categoryItems.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: Icon(_categoryItems[index]['icon']),
-                  title: Text(_categoryItems[index]['title']),
-                  selected: _selectedIndex == index,
-                  onTap: () {
-                    _onItemTapped(index);
-                    Navigator.pop(context);
+            Consumer<TaskProvider>(
+              builder: (context, taskProvider, child) {
+                return ListView.builder(
+                  padding: EdgeInsets.all(8),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _categoryItems.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      leading: Icon(_categoryItems[index]['icon']),
+                      title: Text(_categoryItems[index]['title']),
+                      selected: _selectedIndex == index,
+                      onTap: () {
+                        _onItemTapped(index);
+                        Navigator.pop(context);
+                      },
+                    );
                   },
                 );
               },
