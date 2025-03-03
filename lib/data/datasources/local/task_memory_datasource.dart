@@ -48,6 +48,7 @@ class TaskMemoryDataSource {
         category: 'homeworks',
       ),
     ],
+    'other': [],
   };
 
   List<TaskModel> getTask(String category) {

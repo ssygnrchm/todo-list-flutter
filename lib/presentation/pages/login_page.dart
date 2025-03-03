@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.all(24),
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("asset/images/background_login.png"),
+            image: AssetImage("assets/images/background_login.png"),
             fit: BoxFit.cover,
           ),
         ),
@@ -168,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                   Expanded(
                     child: ElevatedButton.icon(
                       icon: Image.asset(
-                        "asset/images/iconGoogle.png",
+                        "assets/images/iconGoogle.png",
                         height: 24,
                       ),
                       style: ElevatedButton.styleFrom(

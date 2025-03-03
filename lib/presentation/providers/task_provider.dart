@@ -46,6 +46,7 @@ class TaskProvider extends ChangeNotifier {
 
   void loadCategories() {
     _categories = repository.getAllCategories();
+    print(_categories);
     notifyListeners();
   }
 
