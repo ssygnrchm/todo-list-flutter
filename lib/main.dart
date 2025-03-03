@@ -117,7 +117,7 @@ class _MyHomeState extends State<MyHome> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const CircleAvatar(
-                    backgroundImage: AssetImage("asset/abu.png"),
+                    backgroundImage: AssetImage("asset/images/abu.png"),
                     radius: 48,
                   ),
                   const SizedBox(width: 8),
