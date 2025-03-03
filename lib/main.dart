@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/data/datasources/local/task_memory_datasource.dart';
 import 'package:my_first_app/data/repositories/task_repository_impl.dart';
+import 'package:my_first_app/presentation/pages/login_page.dart';
 import 'package:my_first_app/presentation/pages/task_list_page.dart';
 import 'package:my_first_app/presentation/providers/task_provider.dart';
 import 'package:provider/provider.dart';
@@ -41,28 +42,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => const MyHome()),
-            );
-          },
-          child: const Text('Login'),
-        ),
-      ),
-    );
-  }
-}
-
 class MyHome extends StatefulWidget {
-  const MyHome({super.key});
+  final String email;
+  final String phone;
+
+  MyHome({super.key, required this.email, required this.phone});
 
   @override
   State<MyHome> createState() => _MyHomeState();
@@ -127,28 +111,26 @@ class _MyHomeState extends State<MyHome> {
       drawer: Drawer(
         child: Column(
           children: [
-            const DrawerHeader(
+            DrawerHeader(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     backgroundImage: AssetImage("asset/abu.png"),
                     radius: 48,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Classy Cat",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        "classycat@gmail.com",
-                        style: TextStyle(fontSize: 14),
-                      ),
+                      Text(widget.email, style: const TextStyle(fontSize: 14)),
+                      Text(widget.phone, style: const TextStyle(fontSize: 14)),
                     ],
                   ),
                 ],
