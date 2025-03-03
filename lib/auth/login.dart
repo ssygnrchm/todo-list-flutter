@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_first_app/main.dart';
+import 'package:my_first_app/views/my_home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -118,7 +118,11 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const MyHome(),
+                                      builder:
+                                          (context) => MyHome(
+                                            email: _emailController.text,
+                                            phone: _phoneController.text,
+                                          ),
                                     ),
                                   );
                                 }
