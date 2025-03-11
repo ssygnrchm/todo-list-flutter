@@ -1,47 +1,47 @@
-import 'package:my_first_app/data/datasources/local/task_memory_datasource.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:my_first_app/data/datasources/local/task_sqlite_datasource.dart';
 import 'package:my_first_app/data/models/task_model.dart';
 import 'package:my_first_app/domain/entities/task.dart';
 import 'package:my_first_app/domain/repositories/task_repository.dart';
 
 class TaskRepositoryImpl implements TaskRepository {
-  final TaskMemoryDataSource dataSource;
-
-  TaskRepositoryImpl(this.dataSource);
+  final TaskSqliteDatasource datasource;
+  TaskRepositoryImpl({required this.datasource});
 
   @override
-  List<Task> getTask(String category) {
-    // TODO: implement getTask
-    return dataSource.getTask(category);
+  Future<void> addCategory(String category) async {
+    // TODO: implement addCategory
+    await datasource.addCategory(category);
   }
 
   @override
-  void addTask(Task task) {
+  Future<void> addTask(Task task) async {
     // TODO: implement addTask
     final taskModel = TaskModel.fromTask(task);
-    dataSource.addTask(taskModel);
+    await datasource.addTask(taskModel);
   }
 
   @override
-  void updateTaskStatus(String id, String status) {
-    // TODO: implement updateTaskStatus
-    dataSource.updateTaskStatus(id, status);
-  }
-
-  @override
-  void deleteTask(String id) {
+  Future<void> deleteTask(String id) async {
     // TODO: implement deleteTask
-    dataSource.deleteTask(id);
+    await datasource.deleteTask(id);
   }
 
   @override
-  List<String> getAllCategories() {
+  Future<List<String>> getAllCategories() async {
     // TODO: implement getAllCategories
-    return dataSource.getAllCategories();
+    return await datasource.getAllCategories();
   }
 
   @override
-  void addCategory(String category) {
-    // TODO: implement addCategory
-    dataSource.addCategory(category);
+  Future<List<Task>> getTask(String category) async {
+    // TODO: implement getTask
+    return await datasource.getTask(category);
+  }
+
+  @override
+  Future<void> updateTaskStatus(String id, String status) async {
+    // TODO: implement updateTaskStatus
+    await datasource.updateTaskStatus(id, status);
   }
 }

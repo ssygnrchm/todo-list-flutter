@@ -1,11 +1,11 @@
 import 'package:my_first_app/domain/entities/task.dart';
 
 abstract class TaskRepository {
-  List<Task> getTask(String category);
-  void addTask(Task task);
-  void updateTaskStatus(String id, String status);
-  void deleteTask(String id);
+  Future<List<Task>> getTask(String category);
+  Future<void> addTask(Task task);
+  Future<void> updateTaskStatus(String id, String status);
+  Future<void> deleteTask(String id);
 
-  List<String> getAllCategories();
-  void addCategory(String category);
+  Future<List<String>> getAllCategories();
+  Future<void> addCategory(String category);
 }

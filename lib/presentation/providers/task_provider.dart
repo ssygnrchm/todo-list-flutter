@@ -10,6 +10,7 @@ class TaskProvider extends ChangeNotifier {
   String _currentCategory = 'daily_task';
   List<Task> _tasks = [];
   List<String> _categories = [];
+  bool _isLoading = false;
 
   TaskProvider(this.repository) {
     loadTasks(_currentCategory);
@@ -28,6 +29,8 @@ class TaskProvider extends ChangeNotifier {
 
   List<String> get categories => _categories;
 
+  bool get isLoading => _isLoading;
+
   void setCategory(String category) {
     _currentCategory = category;
     loadTasks(category);
@@ -39,17 +42,35 @@ class TaskProvider extends ChangeNotifier {
     loadCategories();
   }
 
-  void loadTasks(String category) {
-    _tasks = repository.getTask(category);
+  Future<void> loadTasks(String category) async {
+    _isLoading = true;
+
+    notifyListeners();
+
+    try {
+      _tasks = await repository.getTask(category);
+    } catch (e) {
+      debugPrint('Error loading task: $e');
+      _tasks = [];
+    }
+
+    _isLoading = false;
     notifyListeners();
   }
 
-  void loadCategories() {
-    _categories = repository.getAllCategories();
+  Future<void> loadCategories() async {
+    try {
+      _categories = await repository.getAllCategories();
+    } catch (e) {
+      debugPrint('Error loading categories: $e');
+      _categories = [];
+    }
     notifyListeners();
   }
 
-  void addTask(String title) {
+  Future<void> addTask(String title) async {
+    if (title.trim().isEmpty) return;
+
     final task = Task(
       id: _uuid.v4(),
       title: title,
@@ -57,27 +78,42 @@ class TaskProvider extends ChangeNotifier {
       category: _currentCategory,
     );
 
-    repository.addTask(task);
-    loadTasks(_currentCategory);
-  }
-
-  void addCategory(String category) {
-    if (category.trim().isNotEmpty) {
-      repository.addCategory(category.trim());
-      loadCategories();
+    try {
+      await repository.addTask(task);
+      await loadTasks(_currentCategory);
+    } catch (e) {
+      debugPrint('Error adding task: $e');
     }
   }
 
-  void toogleTaskStatus(String id) {
+  Future<void> addCategory(String category) async {
+    if (category.trim().isEmpty) return;
+    try {
+      await repository.addCategory(category.trim());
+      await loadCategories();
+    } catch (e) {
+      debugPrint('Error adding category: $e');
+    }
+  }
+
+  Future<void> toogleTaskStatus(String id) async {
     final task = _tasks.firstWhere((task) => task.id == id);
     final newStatus = task.status == 'todo' ? 'done' : 'todo';
 
-    repository.updateTaskStatus(id, newStatus);
-    loadTasks(_currentCategory);
+    try {
+      await repository.updateTaskStatus(id, newStatus);
+      await loadTasks(_currentCategory);
+    } catch (e) {
+      debugPrint('Error updating task status: $e');
+    }
   }
 
-  void deleteTask(String id) {
-    repository.deleteTask(id);
-    loadTasks(_currentCategory);
+  Future<void> deleteTask(String id) async {
+    try {
+      await repository.deleteTask(id);
+      await loadTasks(_currentCategory);
+    } catch (e) {
+      debugPrint('Error deleting task: $e');
+    }
   }
 }

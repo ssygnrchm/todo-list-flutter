@@ -54,42 +54,60 @@ class _TaskListPageState extends State<TaskListPage> {
                         child: Column(
                           children: [
                             _sectionTitle('Todo'),
-                            ListView.builder(
-                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: provider.todoTasks.length,
-                              itemBuilder: (context, index) {
-                                final task = provider.todoTasks[index];
-                                return TaskListItem(
-                                  id: task.id,
-                                  title: task.title,
-                                  isDone: false,
-                                  onToogle: provider.toogleTaskStatus,
-                                  onDelete: provider.deleteTask,
-                                );
-                              },
-                            ),
+                            if (provider.isLoading)
+                              const Padding(
+                                padding: EdgeInsets.all(16),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              )
+                            else if (provider.todoTasks.isEmpty)
+                              const Padding(
+                                padding: EdgeInsets.all(16),
+                                child: Center(child: Text('No tasks yet')),
+                              )
+                            else
+                              ListView.builder(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: provider.todoTasks.length,
+                                itemBuilder: (context, index) {
+                                  final task = provider.todoTasks[index];
+                                  return TaskListItem(
+                                    id: task.id,
+                                    title: task.title,
+                                    isDone: false,
+                                    onToogle: provider.toogleTaskStatus,
+                                    onDelete: provider.deleteTask,
+                                  );
+                                },
+                              ),
                           ],
                         ),
                       ),
                     ),
                     _sectionTitle('Done'),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: provider.doneTasks.length,
-                      itemBuilder: (context, index) {
-                        final task = provider.doneTasks[index];
-                        return TaskListItem(
-                          id: task.id,
-                          title: task.title,
-                          isDone: true,
-                          onToogle: provider.toogleTaskStatus,
-                          onDelete: provider.deleteTask,
-                        );
-                      },
-                    ),
+                    if (provider.isLoading)
+                      const Center(child: CircularProgressIndicator())
+                    else if (provider.doneTasks.isEmpty)
+                      const Center(child: Text('No completed tasks'))
+                    else
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: provider.doneTasks.length,
+                        itemBuilder: (context, index) {
+                          final task = provider.doneTasks[index];
+                          return TaskListItem(
+                            id: task.id,
+                            title: task.title,
+                            isDone: true,
+                            onToogle: provider.toogleTaskStatus,
+                            onDelete: provider.deleteTask,
+                          );
+                        },
+                      ),
                   ],
                 ),
               ),

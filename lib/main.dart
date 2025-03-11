@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:my_first_app/data/datasources/local/task_memory_datasource.dart';
+import 'package:my_first_app/data/datasources/local/task_sqlite_datasource.dart';
 import 'package:my_first_app/data/repositories/task_repository_impl.dart';
 import 'package:my_first_app/presentation/pages/login_page.dart';
 import 'package:my_first_app/presentation/pages/task_list_page.dart';
 import 'package:my_first_app/presentation/providers/task_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized;
+
+  final taskDataSource = TaskSqliteDatasource();
+
+  runApp(MyApp(taskDatasource: taskDataSource));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final TaskSqliteDatasource taskDatasource;
+  const MyApp({super.key, required this.taskDatasource});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (_) => TaskRepositoryImpl(TaskMemoryDataSource())),
+        Provider(create: (_) => TaskRepositoryImpl(datasource: taskDatasource)),
         ChangeNotifierProxyProvider<TaskRepositoryImpl, TaskProvider>(
           create:
               (context) => TaskProvider(
