@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/presentation/providers/task_provider.dart';
+import 'package:provider/provider.dart';
 
 class DeleteDialog extends StatelessWidget {
   final String category;
-  const DeleteDialog({super.key, required this.category});
+  // final void Function(int) navigate;
+  const DeleteDialog({
+    super.key,
+    required this.category,
+    // required this.navigate
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +34,15 @@ class DeleteDialog extends StatelessWidget {
                         backgroundColor: Colors.deepPurple,
                         foregroundColor: Colors.white,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        final taskProvider = Provider.of<TaskProvider>(
+                          context,
+                          listen: false,
+                        );
+                        taskProvider.deleteCategory(category);
+
+                        Navigator.pop(context, 'OK');
+                      },
                       child: const Text('OK'),
                     ),
                   ],

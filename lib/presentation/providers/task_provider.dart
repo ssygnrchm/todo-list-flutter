@@ -119,7 +119,7 @@ class TaskProvider extends ChangeNotifier {
 
   Future<void> deleteCategory(String category) async {
     try {
-      if (category == _currentCategory) setCategory('daily_task');
+      setCategory('daily_task');
       await repository.deleteCategory(category);
       await loadCategories();
     } catch (e) {

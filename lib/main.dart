@@ -117,10 +117,13 @@ class _MyHomeState extends State<MyHome> {
         title: Text(categoryTitle),
         centerTitle: true,
         actions:
-            (categoryTitle != 'Daily Task' &&
-                    categoryTitle != 'Homeworks' &&
-                    categoryTitle != 'Other')
-                ? [DeleteDialog(category: categoryTitle)]
+            (!['Daily Task', 'Homeworks', 'Other'].contains(categoryTitle))
+                ? [
+                  DeleteDialog(
+                    category: categoryTitle,
+                    // navigate: ,
+                  ),
+                ]
                 : null,
       ),
 
