@@ -4,6 +4,7 @@ import 'package:my_first_app/data/repositories/task_repository_impl.dart';
 import 'package:my_first_app/presentation/pages/login_page.dart';
 import 'package:my_first_app/presentation/pages/task_list_page.dart';
 import 'package:my_first_app/presentation/providers/task_provider.dart';
+import 'package:my_first_app/presentation/widgets/delete_dialog.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -110,8 +111,18 @@ class _MyHomeState extends State<MyHome> {
   @override
   Widget build(BuildContext context) {
     final category = _categoryItems[_selectedIndex];
+    final categoryTitle = category['title'].toString();
     return Scaffold(
-      appBar: AppBar(title: Text(category['title']), centerTitle: true),
+      appBar: AppBar(
+        title: Text(categoryTitle),
+        centerTitle: true,
+        actions:
+            (categoryTitle != 'Daily Task' &&
+                    categoryTitle != 'Homeworks' &&
+                    categoryTitle != 'Other')
+                ? [DeleteDialog(category: categoryTitle)]
+                : null,
+      ),
 
       drawer: Drawer(
         child: Column(

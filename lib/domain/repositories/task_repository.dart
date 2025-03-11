@@ -8,4 +8,5 @@ abstract class TaskRepository {
 
   Future<List<String>> getAllCategories();
   Future<void> addCategory(String category);
+  Future<void> deleteCategory(String category);
 }

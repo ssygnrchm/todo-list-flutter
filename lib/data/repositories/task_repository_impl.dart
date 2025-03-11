@@ -44,4 +44,10 @@ class TaskRepositoryImpl implements TaskRepository {
     // TODO: implement updateTaskStatus
     await datasource.updateTaskStatus(id, status);
   }
+
+  @override
+  Future<void> deleteCategory(String category) async {
+    // TODO: implement deleteCategory
+    await datasource.deleteCategory(category);
+  }
 }

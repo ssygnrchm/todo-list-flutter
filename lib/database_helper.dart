@@ -91,6 +91,21 @@ class DatabaseHelper {
     await db.insert('categories', {
       'name': category,
     }, conflictAlgorithm: ConflictAlgorithm.ignore);
-    print(getAllCategories());
+  }
+
+  Future<void> deleteCategory(String category) async {
+    final db = await database;
+
+    // deleting all the tasks in the category
+    await db.transaction((txn) async {
+      await txn.delete('tasks', where: 'category = ?', whereArgs: [category]);
+
+      // then deleting the category itself
+      await txn.delete('categories', where: 'name = ?', whereArgs: [category]);
+    });
+
+    // fro debugging purpose
+    print('Category deleted: $category');
+    print(await getAllCategories());
   }
 }

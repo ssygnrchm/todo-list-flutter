@@ -116,4 +116,14 @@ class TaskProvider extends ChangeNotifier {
       debugPrint('Error deleting task: $e');
     }
   }
+
+  Future<void> deleteCategory(String category) async {
+    try {
+      if (category == _currentCategory) setCategory('daily_task');
+      await repository.deleteCategory(category);
+      await loadCategories();
+    } catch (e) {
+      debugPrint('Error deleting category: $e');
+    }
+  }
 }

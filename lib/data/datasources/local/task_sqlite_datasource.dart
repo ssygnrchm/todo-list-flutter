@@ -29,4 +29,8 @@ class TaskSqliteDatasource {
   Future<List<String>> getAllCategories() async {
     return await _databaseHelper.getAllCategories();
   }
+
+  Future<void> deleteCategory(String category) async {
+    await _databaseHelper.deleteCategory(category);
+  }
 }
