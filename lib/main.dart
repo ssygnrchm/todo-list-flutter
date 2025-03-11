@@ -121,7 +121,11 @@ class _MyHomeState extends State<MyHome> {
                 ? [
                   DeleteDialog(
                     category: categoryTitle,
-                    // navigate: ,
+                    onCategoryDeleted: () {
+                      setState(() {
+                        _selectedIndex = 0;
+                      });
+                    },
                   ),
                 ]
                 : null,
@@ -186,6 +190,7 @@ class _MyHomeState extends State<MyHome> {
               ),
               title: TextField(
                 controller: categoryController,
+
                 decoration: InputDecoration(hintText: "add new list category"),
               ),
             ),

@@ -4,11 +4,11 @@ import 'package:provider/provider.dart';
 
 class DeleteDialog extends StatelessWidget {
   final String category;
-  // final void Function(int) navigate;
+  final VoidCallback? onCategoryDeleted;
   const DeleteDialog({
     super.key,
     required this.category,
-    // required this.navigate
+    this.onCategoryDeleted,
   });
 
   @override
@@ -40,6 +40,10 @@ class DeleteDialog extends StatelessWidget {
                           listen: false,
                         );
                         taskProvider.deleteCategory(category);
+
+                        if (onCategoryDeleted != null) {
+                          onCategoryDeleted!();
+                        }
 
                         Navigator.pop(context, 'OK');
                       },
