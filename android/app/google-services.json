@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:520949233881:android:e2bf72cfba65c309cba6c8",
+        "mobilesdk_app_id": "1:520949233881:android:9237cb7d8c446ca6cba6c8",
         "android_client_info": {
-          "package_name": "com.example.my_first_app"
+          "package_name": "com.madebysisy.myfirstapp"
         }
       },
       "oauth_client": [],

@@ -1,4 +1,4 @@
-package com.madebysisy.my_first_app
+package com.madebysisy.myfirstapp
 
 import io.flutter.embedding.android.FlutterActivity
 

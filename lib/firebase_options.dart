@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDPzprDlsQKH5hVF8A4OzP4f9HRfkYYdr8',
-    appId: '1:520949233881:android:e2bf72cfba65c309cba6c8',
+    appId: '1:520949233881:android:9237cb7d8c446ca6cba6c8',
     messagingSenderId: '520949233881',
     projectId: 'fir-flutter-codelab-2b884',
     storageBucket: 'fir-flutter-codelab-2b884.firebasestorage.app',
