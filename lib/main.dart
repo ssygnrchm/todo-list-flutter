@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/data/datasources/local/task_sqlite_datasource.dart';
 import 'package:my_first_app/data/repositories/task_repository_impl.dart';
+import 'package:my_first_app/domain/services/firebase_auth_service.dart';
+import 'package:my_first_app/presentation/pages/auth_wrapper.dart';
 import 'package:my_first_app/presentation/pages/login_page.dart';
 import 'package:my_first_app/presentation/pages/task_list_page.dart';
 import 'package:my_first_app/presentation/providers/task_provider.dart';
@@ -10,8 +12,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized;
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final taskDataSource = TaskSqliteDatasource();
 
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
               (context, repository, previous) =>
                   previous!..setRepository(repository),
         ),
+        Provider(create: (_) => FirebaseAuthService()),
       ],
       child: MaterialApp(
         title: 'Todo List App',
@@ -45,7 +48,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           fontFamily: 'Poppins',
         ),
-        home: const LoginPage(),
+        home: const AuthWrapper(),
       ),
     );
   }
@@ -110,6 +113,10 @@ class _MyHomeState extends State<MyHome> {
       provider.setCategory(category);
     });
   }
+
+  void _signOut() async {}
+
+  void _signIn() async {}
 
   @override
   Widget build(BuildContext context) {

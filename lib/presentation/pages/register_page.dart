@@ -1,20 +1,21 @@
-// lib/presentation/pages/login_page.dart
+// lib/presentation/pages/register_page.dart
 import 'package:flutter/material.dart';
 import 'package:my_first_app/domain/services/firebase_auth_service.dart';
 import 'package:my_first_app/main.dart';
-import 'package:my_first_app/presentation/pages/register_page.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final FirebaseAuthService _authService = FirebaseAuthService();
 
   // Form Key
@@ -23,9 +24,9 @@ class _LoginPageState extends State<LoginPage> {
   bool _isActive = false;
   // Password visibility
   bool _isObsecure = true;
+  bool _isConfirmObsecure = true;
   // Loading state
   bool _isLoading = false;
-
   // Error message
   String? _errorMessage;
 
@@ -33,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(title: const Text("Sign Up"), centerTitle: true),
       body: Container(
         alignment: Alignment.center,
         height: MediaQuery.of(context).size.height,
@@ -52,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Center(
                     child: textWidget(
-                      value: "Welcome Back",
+                      value: "Create Account",
                       fsize: 24,
                       fweight: FontWeight.bold,
                       textColor: const Color.fromARGB(255, 34, 34, 34),
@@ -61,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 8),
                   Center(
                     child: textWidget(
-                      value: "Login to access your account",
+                      value: "Sign up to get started",
                       fsize: 14,
                     ),
                   ),
@@ -117,19 +119,51 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                   const SizedBox(height: 18),
-                  GestureDetector(
-                    onTap: () => _forgotPassword(),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: textWidget(
-                        value: "Forgot Password?",
-                        textColor: const Color.fromARGB(255, 243, 75, 27),
+                  textWidget(value: "Confirm Password"),
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    onChanged: (value) {
+                      setState(() {
+                        _isActive = true;
+                      });
+                    },
+                    obscuringCharacter: "•",
+                    obscureText: _isConfirmObsecure,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(16),
+                      isDense: true,
+                      hintText: "Confirm your password",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(32),
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _isConfirmObsecure = !_isConfirmObsecure;
+                          });
+                        },
+                        icon: Icon(
+                          _isConfirmObsecure
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: Colors.grey,
+                          size: 24,
+                        ),
                       ),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please confirm your password";
+                      }
+                      if (value != _passwordController.text) {
+                        return "Passwords do not match";
+                      }
+                      return null;
+                    },
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               // Display error message if any
               if (_errorMessage != null) ...[
                 Container(
@@ -140,13 +174,13 @@ class _LoginPageState extends State<LoginPage> {
                     textAlign: TextAlign.center,
                   ),
                 ),
+                const SizedBox(height: 10),
               ],
-              const SizedBox(height: 10),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: _isActive && !_isLoading ? _login : null,
+                      onPressed: _isActive && !_isLoading ? _register : null,
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size.fromHeight(
                           MediaQuery.of(context).size.height / 15,
@@ -170,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                                   strokeWidth: 2,
                                 ),
                               )
-                              : const Text("Login"),
+                              : const Text("Register"),
                     ),
                   ),
                 ],
@@ -179,58 +213,14 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Expanded(child: Divider()),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: textWidget(value: "Or Sign In With"),
-                  ),
-                  const Expanded(child: Divider()),
-                ],
-              ),
-              const SizedBox(height: 18),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      icon: Image.asset(
-                        "assets/images/iconGoogle.png",
-                        height: 24,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size.fromHeight(
-                          MediaQuery.of(context).size.height / 15,
-                        ),
-                      ),
-                      onPressed: () {
-                        // Google sign-in would go here
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Google sign-in not implemented yet'),
-                          ),
-                        );
-                      },
-                      label: const Text("Google"),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 18),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  textWidget(value: "Don't have an account?"),
+                  textWidget(value: "Already have an account?"),
                   const SizedBox(width: 4),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterPage(),
-                        ),
-                      );
+                      Navigator.pop(context);
                     },
                     child: textWidget(
-                      value: "Sign Up",
+                      value: "Sign In",
                       textColor: const Color.fromARGB(255, 40, 63, 177),
                       fweight: FontWeight.bold,
                     ),
@@ -244,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _login() async {
+  void _register() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
@@ -252,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
       });
 
       try {
-        final user = await _authService.signInWithEmailAndPassword(
+        final user = await _authService.registerWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
@@ -281,29 +271,6 @@ class _LoginPageState extends State<LoginPage> {
           _isLoading = false;
         });
       }
-    }
-  }
-
-  void _forgotPassword() async {
-    final email = _emailController.text.trim();
-    if (email.isEmpty) {
-      setState(() {
-        _errorMessage = "Please enter your email to reset password";
-      });
-      return;
-    }
-
-    try {
-      await _authService.sendPasswordResetEmail(email);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Password reset email sent to $email')),
-        );
-      }
-    } catch (e) {
-      setState(() {
-        _errorMessage = e.toString();
-      });
     }
   }
 
