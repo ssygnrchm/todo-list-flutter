@@ -59,12 +59,10 @@ class FirebaseAuthService {
   // Handle Firebase Auth exceptions
   String _handleAuthException(FirebaseAuthException e) {
     String message;
+    print(e.code);
     switch (e.code) {
       case 'user-not-found':
         message = 'No user found with this email.';
-        break;
-      case 'wrong-password':
-        message = 'Wrong password provided.';
         break;
       case 'email-already-in-use':
         message = 'The email address is already in use.';
@@ -78,6 +76,8 @@ class FirebaseAuthService {
       case 'operation-not-allowed':
         message = 'This operation is not allowed.';
         break;
+      case 'invalid-credential':
+        message = 'invalid';
       default:
         message = 'An error occurred. Please try again.';
     }
