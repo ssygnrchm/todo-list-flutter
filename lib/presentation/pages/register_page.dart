@@ -12,7 +12,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+  // final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
@@ -90,18 +90,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 18),
-                  textWidget(value: "Phone Number"),
-                  loginTextField(
-                    "Enter your phone number",
-                    controller: _phoneController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Phone number is required";
-                      }
-                      return null;
-                    },
-                  ),
+                  // const SizedBox(height: 18),
+                  // textWidget(value: "Phone Number"),
+                  // loginTextField(
+                  //   "Enter your phone number",
+                  //   controller: _phoneController,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return "Phone number is required";
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                   const SizedBox(height: 18),
                   textWidget(value: "Password"),
                   loginTextField(
@@ -254,10 +254,8 @@ class _RegisterPageState extends State<RegisterPage> {
               context,
               MaterialPageRoute(
                 builder:
-                    (context) => MyHome(
-                      email: _emailController.text,
-                      phone: _phoneController.text,
-                    ),
+                    (context) =>
+                        MyHome(email: _emailController.text, phone: ''),
               ),
             );
           }

@@ -114,9 +114,22 @@ class _MyHomeState extends State<MyHome> {
     });
   }
 
-  void _signOut() async {}
+  void _signOut() async {
+    try {
+      final authService = Provider.of<FirebaseAuthService>(
+        context,
+        listen: false,
+      );
+      await authService.signOut();
+      // No need to navigate, the AuthWrapper will handle this
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error signing out: ${e.toString()}')),
+      );
+    }
+  }
 
-  void _signIn() async {}
+  // void _signIn() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +176,7 @@ class _MyHomeState extends State<MyHome> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(widget.email, style: const TextStyle(fontSize: 14)),
-                      Text(widget.phone, style: const TextStyle(fontSize: 14)),
+                      // Text(widget.phone, style: const TextStyle(fontSize: 14)),
                     ],
                   ),
                 ],
@@ -205,6 +218,18 @@ class _MyHomeState extends State<MyHome> {
               ),
             ),
             Divider(thickness: 1),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text("Sign Out"),
+              onTap: () {
+                _signOut();
+                Navigator.pop(context);
+                // Navigator.pushReplacement(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => LoginPage()),
+                // ); // Close drawer
+              },
+            ),
           ],
         ),
       ),

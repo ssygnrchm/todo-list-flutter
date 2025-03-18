@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+  // final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuthService _authService = FirebaseAuthService();
 
@@ -88,18 +88,18 @@ class _LoginPageState extends State<LoginPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 18),
-                  textWidget(value: "Phone Number"),
-                  loginTextField(
-                    "Enter your phone number",
-                    controller: _phoneController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Phone number is required";
-                      }
-                      return null;
-                    },
-                  ),
+                  // const SizedBox(height: 18),
+                  // textWidget(value: "Phone Number"),
+                  // loginTextField(
+                  //   "Enter your phone number",
+                  //   controller: _phoneController,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return "Phone number is required";
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                   const SizedBox(height: 18),
                   textWidget(value: "Password"),
                   loginTextField(
@@ -264,10 +264,8 @@ class _LoginPageState extends State<LoginPage> {
               context,
               MaterialPageRoute(
                 builder:
-                    (context) => MyHome(
-                      email: _emailController.text,
-                      phone: _phoneController.text,
-                    ),
+                    (context) =>
+                        MyHome(email: _emailController.text, phone: ''),
               ),
             );
           }
