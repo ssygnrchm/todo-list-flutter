@@ -201,14 +201,16 @@ class _LoginPageState extends State<LoginPage> {
                           MediaQuery.of(context).size.height / 15,
                         ),
                       ),
-                      onPressed: () {
-                        // Google sign-in would go here
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Google sign-in not implemented yet'),
-                          ),
-                        );
-                      },
+                      onPressed: _googleLogin,
+                      //() {
+                      //   // Google sign-in would go here
+
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     const SnackBar(
+                      //       content: Text('Google sign-in not implemented yet'),
+                      //     ),
+                      //   );
+                      // },
                       label: const Text("Google"),
                     ),
                   ),
@@ -279,6 +281,28 @@ class _LoginPageState extends State<LoginPage> {
           _isLoading = false;
         });
       }
+    }
+  }
+
+  void _googleLogin() async {
+    try {
+      final user = await _authService.signInwithGoogle();
+      if (user != null) {
+        // Navigate to home screen
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => MyHome(email: _emailController.text, phone: ''),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+      });
     }
   }
 
