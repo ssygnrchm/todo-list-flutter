@@ -254,55 +254,65 @@ class _LoginPageState extends State<LoginPage> {
       });
 
       try {
-        final user = await _authService.signInWithEmailAndPassword(
+        // final user =
+        await _authService.signInWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
 
-        if (user != null) {
-          // Navigate to home screen
-          if (mounted) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder:
-                    (context) =>
-                        MyHome(email: _emailController.text, phone: ''),
-              ),
-            );
-          }
-        }
+        // if (user != null) {
+        //   // Navigate to home screen
+        //   if (mounted) {
+        //     Navigator.pushReplacement(
+        //       context,
+        //       MaterialPageRoute(
+        //         builder:
+        //             (context) =>
+        //                 MyHome(email: _emailController.text, phone: ''),
+        //       ),
+        //     );
+        //   }
+        // }
       } catch (e) {
         setState(() {
           _errorMessage = e.toString();
         });
       } finally {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     }
   }
 
   void _googleLogin() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
     try {
       final user = await _authService.signInwithGoogle();
-      if (user != null) {
+      if (user != null && mounted) {
         // Navigate to home screen
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder:
-                  (context) => MyHome(email: _emailController.text, phone: ''),
-            ),
-          );
-        }
+        setState(() {
+          _errorMessage = "Google sign-in was cancelled";
+        });
       }
     } catch (e) {
-      setState(() {
-        _errorMessage = e.toString();
-      });
+      if (mounted) {
+        setState(() {
+          _errorMessage = e.toString();
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 

@@ -242,32 +242,35 @@ class _RegisterPageState extends State<RegisterPage> {
       });
 
       try {
-        final user = await _authService.registerWithEmailAndPassword(
+        // final user =
+        await _authService.registerWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
 
-        if (user != null) {
-          // Navigate to home screen
-          if (mounted) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder:
-                    (context) =>
-                        MyHome(email: _emailController.text, phone: ''),
-              ),
-            );
-          }
-        }
+        // if (user != null) {
+        //   // Navigate to home screen
+        //   if (mounted) {
+        //     Navigator.pushReplacement(
+        //       context,
+        //       MaterialPageRoute(
+        //         builder:
+        //             (context) =>
+        //                 MyHome(email: _emailController.text, phone: ''),
+        //       ),
+        //     );
+        //   }
+        // }
       } catch (e) {
         setState(() {
           _errorMessage = e.toString();
         });
       } finally {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     }
   }

@@ -92,8 +92,11 @@ class FirebaseAuthService {
   Future<User?> signInwithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      if (googleUser == null) return null;
+
       final GoogleSignInAuthentication googleAuth =
-          await googleUser!.authentication;
+          await googleUser.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -107,7 +110,7 @@ class FirebaseAuthService {
       return userCredential.user;
     } catch (e) {
       print("Google Sign_In Error: $e");
-      return null;
+      throw "Failed to sign in with Google: $e";
     }
   }
 
